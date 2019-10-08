@@ -1,0 +1,2 @@
+class InvalidBoard(Exception):
+    pass
