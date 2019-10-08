@@ -1,6 +1,6 @@
 import unittest
 from pacman.pacman import Direction
-import pacman.game as game
+import engine.game as game
 
 
 # TODO It would be better if I create an abstraction of the board?
