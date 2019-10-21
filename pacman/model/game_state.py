@@ -10,27 +10,29 @@ def _create_pacman(item_string):
     return Pacman()
 
 
-class GameState(object):
+def build_game_state_from_string_tuple(board_string):
+    board = []
 
-    def __init__(self, string_state):
-        self._state = []
-        # TODO: Later on this logic should be moved to a Builder
-        # Then, this object will be completely decoupled of the string
-        # representation
-        for row in string_state:
-            items_string = list(row)
-            items = []
-            for i in items_string:
-                if i == '#':
-                    items.append(Wall())
-                elif i in [' ', '.']:
-                    items.append(_create_space(i))
-                elif i in ['v', '^', '<', '>']:
-                    items.append(_create_pacman(i))
-            self._state.append(items)
+    for row in board_string:
+        items_string = list(row)
+        converted_row = []
 
-    def get_item_at(self, x, y):
-        return self._state[x][y]
+        for item in items_string:
+            if item == '#':
+                converted_row.append(Wall())
+            elif item in [' ', '.']:
+                converted_row.append(_create_space(item))
+            elif item in ['v', '^', '<', '>']:
+                converted_row.append(_create_pacman(item))
 
-    def set_item_at(self, item, x, y):
-        self._state[x][y] = item
+        board.append(converted_row)
+
+    return board
+
+
+def board_width(board):
+    return len(board[0])
+
+
+def board_height(board):
+    return len(board)

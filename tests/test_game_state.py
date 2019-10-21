@@ -1,19 +1,19 @@
 import unittest
 from pacman.model.items import *
 from pacman.model.pacman import Pacman
-from pacman.model.game_state import GameState
+from pacman.model.game_state import build_game_state_from_string_tuple, board_width, board_height
 
 
 class TestGameState(unittest.TestCase):
     def setUp(self):
         string_state = ('#....#', '#..v.#')
-        self.state = GameState(string_state)
+        self.state = build_game_state_from_string_tuple(string_state)
 
     def test_get_wall_from_board(self):
-        self.assertIsInstance(self.state.get_item_at(0, 0), Wall)
+        self.assertIsInstance(self.state[0][0], Wall)
 
     def test_get_space_with_dot(self):
-        item = self.state.get_item_at(0, 1)
+        item = self.state[0][1]
         self.assertIsInstance(item, Space)
         # TODO Beware of that, here I attempted to test a method of Space
         # TODO this is not the correct place, create a test for this class instead
@@ -21,7 +21,7 @@ class TestGameState(unittest.TestCase):
         # self.assertTrue(item.contains_dot())
 
     def test_get_pacman(self):
-        item = self.state.get_item_at(1, 3)
+        item = self.state[1][3]
         self.assertIsInstance(item, Pacman)
         # TODO: Corner case: does this pacman reflects the actual board state?
 
@@ -30,5 +30,17 @@ class TestGameState(unittest.TestCase):
     # to moving all game logic to the board, which is undesired. Board should
     # only have getters/setters and other entity should handle the business logic
     def test_board_items_can_be_set(self):
-        self.state.set_item_at(Wall(), 0, 1)
-        self.assertIsInstance(self.state.get_item_at(0, 1), Wall)
+        self.state[0][1] = Wall()
+        self.assertIsInstance(self.state[0][1], Wall)
+
+    def test_invalid_coordinates_throws_exception(self):
+        with self.assertRaises(IndexError):
+            self.state[6][6]
+
+    def test_write_to_invalid_coordinates_throws_exception(self):
+        with self.assertRaises(IndexError):
+            self.state[6][6] = Wall()
+
+    def test_board_dimensions_are_available(self):
+        self.assertEqual(6, board_width(self.state))
+        self.assertEqual(2, board_height(self.state))
