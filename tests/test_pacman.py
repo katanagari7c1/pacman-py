@@ -1,5 +1,5 @@
 import unittest
-from pacman.pacman import Pacman, Direction
+from model.pacman import Pacman, Direction
 
 
 # TODO Tests can be more robust if we avoid exposing the Direction enum

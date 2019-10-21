@@ -1,4 +1,4 @@
-from pacman.pacman import Direction
+from model.pacman import Direction
 
 
 # Game tick function. Receives current game state

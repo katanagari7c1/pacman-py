@@ -1,5 +1,5 @@
 import unittest
-from pacman import board_reader
+from utils import board_reader
 
 
 class TestBoardReader(unittest.TestCase):

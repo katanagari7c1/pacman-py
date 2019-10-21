@@ -1,7 +1,7 @@
 import pygame
 import os
-from pacman import board_reader
-from pacman.pacman import Direction
+from utils import board_reader
+from model.pacman import Direction
 from pacman.engine import game
 
 SPRITE_SIZE = 16

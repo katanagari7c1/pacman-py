@@ -1,5 +1,5 @@
 import unittest
-from pacman.pacman import Direction
+from model.pacman import Direction
 import engine.game as game
 
 
