@@ -10,8 +10,3 @@ class Direction(Enum):
 
 class Pacman(object):
     direction = Direction.UP
-
-    def setDirection(self, direction):
-        for d in Direction:
-            if direction == d:
-                self.direction = d

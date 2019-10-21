@@ -1,7 +1,7 @@
 import unittest
 from pacman.model.items import *
 from pacman.model.pacman import Pacman
-from pacman.model.game_state import build_game_state_from_string_tuple, board_width, board_height
+from pacman.model.game_board import build_game_state_from_string_tuple, board_width, board_height, board_to_string
 
 
 class TestGameState(unittest.TestCase):
@@ -44,3 +44,9 @@ class TestGameState(unittest.TestCase):
     def test_board_dimensions_are_available(self):
         self.assertEqual(6, board_width(self.state))
         self.assertEqual(2, board_height(self.state))
+
+    def test_board_can_be_represented_as_string(self):
+        board = build_game_state_from_string_tuple(('#...#', '#. <#'))
+        expected = ('#...#', '#. <#')
+
+        self.assertEqual(expected, board_to_string(board))

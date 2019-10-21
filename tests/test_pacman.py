@@ -12,9 +12,5 @@ class TestPacman(unittest.TestCase):
         self.assertEqual(self.pacman.direction, Direction.UP)
 
     def test_position_can_be_changed(self):
-        self.pacman.setDirection(Direction.LEFT)
+        self.pacman.direction = Direction.LEFT
         self.assertEqual(self.pacman.direction, Direction.LEFT)
-
-    def test_invalid_direction_does_not_change_pacmans_direction(self):
-        self.pacman.setDirection('1234')
-        self.assertEqual(self.pacman.direction, Direction.UP)
