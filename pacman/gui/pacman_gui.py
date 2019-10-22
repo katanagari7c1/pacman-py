@@ -1,11 +1,14 @@
 import pygame
 import os
-from utils import board_reader
-from model.pacman import Direction
-from pacman.engine import game
+from pacman.utils import board_reader
+from pacman.model.pacman import Direction, Pacman
+from pacman.model.game_board import build_game_state_from_string_tuple as build_board
+from pacman.engine.game_controller import GameController
+from pacman.engine.game import tick as game_tick
+from pacman.model.items import *
 
 SPRITE_SIZE = 16
-FPS = 3
+FPS = 30
 GAME_KEYS = {
     'up': pygame.K_UP,
     'down': pygame.K_DOWN,
@@ -13,11 +16,10 @@ GAME_KEYS = {
     'right': pygame.K_RIGHT
 }
 
-game_board = board_reader.read('pacman/resources/board.txt')
+game_board = build_board(board_reader.read('pacman/resources/board.txt'))
+game_controller = GameController(game_board, game_tick, FPS)
 board_width = len(game_board[0])
 board_height = len(game_board)
-
-current_direction = None
 
 pygame.init()
 pygame.display.set_caption('Pacman!')
@@ -35,19 +37,19 @@ dot = pygame.image.load('pacman/resources/dot.png')
 
 def __render_board():
     screen.fill((48, 48, 48))
-    for j, row in enumerate(game_board):
+    for j, row in enumerate(game_controller.state):
         for i, item in enumerate(list(row)):
-            if item == '#':
+            if isinstance(item, Wall):
                 screen.blit(wall, (i * SPRITE_SIZE, j * SPRITE_SIZE))
-            elif item == '.':
+            elif isinstance(item, Space) and isinstance(item.content, Dot):
                 screen.blit(dot, (i * SPRITE_SIZE, j * SPRITE_SIZE))
-            elif item in ['>', '<', '^', 'v']:
+            elif isinstance(item, Pacman):
                 angle = 0
-                if item == '>':
+                if item.direction == Direction.LEFT:
                     angle = 180
-                elif item == 'v':
+                elif item.direction == Direction.UP:
                     angle = 90
-                elif item == '^':
+                elif item.direction == Direction.DOWN:
                     angle = 270
 
                 screen.blit(pygame.transform.rotate(pacman, angle), (i * SPRITE_SIZE, j * SPRITE_SIZE))
@@ -64,6 +66,7 @@ def _handle_input(ev):
         return Direction.RIGHT
 
 
+current_direction = None
 while not finished:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -71,7 +74,8 @@ while not finished:
         if event.type == pygame.KEYDOWN:
             current_direction = _handle_input(event)
 
-    game_board = game.tick(game_board, current_direction)
+    game_controller.direction = current_direction
+    game_controller.update()
     __render_board()
     pygame.display.flip()
     clock.tick(FPS)

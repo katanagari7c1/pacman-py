@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import Mock
 from pacman.model.pacman import Direction
 from pacman.model.game_board import build_game_state_from_string_tuple as create_board, board_to_string
 import engine.game as game
